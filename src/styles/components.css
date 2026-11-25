@@ -427,6 +427,7 @@
   height: var(--vv-height, 100%);
   align-items: flex-end;
   padding: 0;
+  transition: padding-bottom 140ms var(--ease-standard);
 }
 
 /* 键盘浮层不改变视口高度时（部分安卓 PWA），把编辑弹层移到上半屏 */

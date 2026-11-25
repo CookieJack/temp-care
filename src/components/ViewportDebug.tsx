@@ -27,7 +27,7 @@ export function ViewportDebug() {
       const fieldRect = isField ? active.getBoundingClientRect() : null;
       const virtualKeyboard = (
         navigator as Navigator & {
-          virtualKeyboard?: { boundingRect?: DOMRect };
+          virtualKeyboard?: { overlaysContent?: boolean; boundingRect?: DOMRect };
         }
       ).virtualKeyboard;
       const keyboardHeight = virtualKeyboard?.boundingRect?.height ?? 0;
@@ -43,7 +43,7 @@ export function ViewportDebug() {
         `css var: h=${root.style.getPropertyValue('--vv-height') || '-'} t=${root.style.getPropertyValue('--vv-top') || '-'}`,
         `sheet: ${sheetRect ? `${Math.round(sheetRect.top)}-${Math.round(sheetRect.bottom)}` : '未打开'}`,
         `focus: ${isField ? active.tagName.toLowerCase() : '无'} ${fieldRect ? `${Math.round(fieldRect.top)}-${Math.round(fieldRect.bottom)}` : ''}`,
-        `virtualKeyboard: ${virtualKeyboard ? `有 h=${Math.round(keyboardHeight)}` : '无'}`,
+        `virtualKeyboard: ${virtualKeyboard ? `有 h=${Math.round(keyboardHeight)} overlay=${virtualKeyboard.overlaysContent ? 'on' : 'off'}` : '无'}`,
         `meta: ${document.querySelector('meta[name="viewport"]')?.getAttribute('content') ?? '-'}`,
       ]);
     };

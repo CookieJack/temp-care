@@ -9,6 +9,15 @@ interface SheetProps {
   footer?: ReactNode;
 }
 
+interface VirtualKeyboardLike extends EventTarget {
+  overlaysContent: boolean;
+  boundingRect: DOMRectReadOnly;
+}
+
+function getVirtualKeyboard(): VirtualKeyboardLike | undefined {
+  return (navigator as Navigator & { virtualKeyboard?: VirtualKeyboardLike }).virtualKeyboard;
+}
+
 /** 底部编辑弹层：对应小程序 editor-mask + editor-sheet */
 export function Sheet({ open, title, onClose, children, footer }: SheetProps) {
   // 桌面端可用 Esc 关闭弹层（与 confirm / actionSheet 行为一致）
@@ -54,6 +63,8 @@ export function Sheet({ open, title, onClose, children, footer }: SheetProps) {
   // 键盘动画结束后把聚焦的输入框滚入弹层可视区域
   const focusTimer = useRef<number | undefined>(undefined);
   const [keyboardCover, setKeyboardCover] = useState(false);
+  const [keyboardInset, setKeyboardInset] = useState(0);
+  const keyboardInsetRef = useRef(0);
   useEffect(() => {
     return () => window.clearTimeout(focusTimer.current);
   }, []);
@@ -62,6 +73,43 @@ export function Sheet({ open, title, onClose, children, footer }: SheetProps) {
     if (!open) {
       setKeyboardCover(false);
     }
+  }, [open]);
+
+  // 支持 VirtualKeyboard API 的内核：接管键盘布局，读取高度后把弹层顶到键盘上沿
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+    const keyboard = getVirtualKeyboard();
+    if (!keyboard) {
+      return;
+    }
+    const previousOverlay = keyboard.overlaysContent;
+    const handleGeometry = () => {
+      const height = keyboard.boundingRect?.height ?? 0;
+      keyboardInsetRef.current = height;
+      setKeyboardInset(height);
+      if (height > 0) {
+        setKeyboardCover(false);
+      }
+    };
+    try {
+      keyboard.overlaysContent = true;
+    } catch {
+      return;
+    }
+    handleGeometry();
+    keyboard.addEventListener('geometrychange', handleGeometry);
+    return () => {
+      keyboard.removeEventListener('geometrychange', handleGeometry);
+      try {
+        keyboard.overlaysContent = previousOverlay;
+      } catch {
+        // 忽略恢复失败
+      }
+      keyboardInsetRef.current = 0;
+      setKeyboardInset(0);
+    };
   }, [open]);
 
   const handleFocus = (event: FocusEvent<HTMLDivElement>) => {
@@ -80,8 +128,10 @@ export function Sheet({ open, title, onClose, children, footer }: SheetProps) {
     focusTimer.current = window.setTimeout(() => {
       const heightAfter = visibleHeight();
       const touchDevice = window.matchMedia('(pointer: coarse)').matches;
-      // 部分安卓 PWA 内核对键盘浮层不更新视口高度，此时把弹层移到上半屏避免被遮挡
-      setKeyboardCover(touchDevice && heightBefore - heightAfter < 40);
+      // 拿不到键盘高度且视口未收缩时（部分安卓 PWA 内核），只能把弹层移到上半屏避免遮挡
+      const coveredByOverlay =
+        keyboardInsetRef.current === 0 && heightBefore - heightAfter < 40;
+      setKeyboardCover(touchDevice && coveredByOverlay);
       window.setTimeout(() => target.scrollIntoView({ block: 'nearest' }), 60);
     }, 350);
   };
@@ -93,6 +143,7 @@ export function Sheet({ open, title, onClose, children, footer }: SheetProps) {
   return (
     <div
       className={`overlay overlay-sheet${keyboardCover ? ' is-keyboard-cover' : ''}`}
+      style={keyboardInset > 0 ? { paddingBottom: keyboardInset } : undefined}
       role="presentation"
       onClick={onClose}
     >
