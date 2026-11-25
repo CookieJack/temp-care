@@ -1,0 +1,61 @@
+<view class="page">
+    <view class="md-head">
+        <text class="md-head-eyebrow">BATCHES</text>
+        <text class="md-head-title">记录批次</text>
+        <text class="md-head-sub">按病程或场景把记录归组 · 当前档案：{{profileName}}</text>
+    </view>
+
+    <view class="state-card" wx:if="{{viewState === 'loading'}}">
+        <view class="spinner"></view>
+        <text class="state-title">正在加载</text>
+        <text class="state-description">请稍候。</text>
+    </view>
+
+    <view class="state-card" wx:elif="{{viewState === 'empty'}}">
+        <text class="state-icon">○</text>
+        <text class="state-title">还没有批次</text>
+        <text class="state-description">如「11月24日发烧」，把一段病程的体温与用药归在一起看。</text>
+        <view class="primary-button" bindtap="openCreate">新建批次</view>
+    </view>
+
+    <view class="state-card state-card-error" wx:elif="{{viewState === 'error'}}">
+        <text class="state-icon">!</text>
+        <text class="state-title">加载失败</text>
+        <text class="state-description">{{errorMessage}}</text>
+        <view class="primary-button" bindtap="handleRetry">重试</view>
+    </view>
+
+    <view class="md-card" wx:else>
+        <view class="batch-item" wx:for="{{items}}" wx:key="id">
+            <view class="batch-main" data-id="{{item.id}}" bindtap="openDetail">
+                <view class="batch-item-lead"><text class="section-emoji">📋</text><text class="batch-name">{{item.name}}</text></view>
+                <text class="batch-meta">{{item.count}} 条记录<text wx:if="{{item.startText !== ''}}"> · {{item.startText}}</text></text>
+                <text class="batch-updated">更新于 {{item.updatedText}}</text>
+            </view>
+            <view class="batch-actions">
+                <view class="action-button btn-tonal" hover-class="btn-hover" data-id="{{item.id}}" catchtap="openRename">重命名</view>
+                <view class="action-button btn-error" hover-class="btn-hover" data-id="{{item.id}}" catchtap="handleDelete">删除</view>
+            </view>
+        </view>
+    </view>
+
+    <view class="fab" hover-class="fab-hover" bindtap="openCreate" wx:if="{{viewState === 'ready'}}">+</view>
+
+    <view class="editor-mask {{editorClosing ? 'editor-closing' : ''}}" wx:if="{{showEditor}}" bindtap="closeEditor"></view>
+    <view class="editor-sheet {{editorClosing ? 'editor-closing' : ''}}" wx:if="{{showEditor}}">
+        <text class="sheet-title">{{editorTitle}}</text>
+        <text class="sheet-error" wx:if="{{formError !== ''}}">{{formError}}</text>
+
+        <view class="field-group">
+            <view class="md-field {{focusField === 'name' ? 'md-focus' : ''}}">
+                <text class="md-label">批次名称</text>
+                <input class="md-input" placeholder="如 11月24日发烧 / 体检周期" placeholder-class="md-placeholder" value="{{formName}}" data-field="name" bindinput="handleNameInput" bindfocus="handleFieldFocus" bindblur="handleFieldBlur" maxlength="30" />
+            </view>
+        </view>
+
+        <view class="sheet-actions">
+            <view class="sheet-button" bindtap="closeEditor">取消</view>
+            <view class="sheet-button primary-button {{submittingBatch ? 'is-disabled' : ''}}" hover-class="btn-hover" bindtap="handleSave"><view class="spinner spinner-sm spinner-white" wx:if="{{submittingBatch}}"></view>{{submittingBatch ? '保存中…' : '保存'}}</view>
+        </view>
+    </view>
+</view>

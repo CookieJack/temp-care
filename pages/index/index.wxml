@@ -1,0 +1,95 @@
+<view class="page">
+    <view class="state-card" wx:if="{{viewState === 'loading'}}">
+        <view class="spinner"></view>
+        <text class="state-title">正在加载</text>
+        <text class="state-description">请稍候，数据马上准备好。</text>
+    </view>
+
+    <view class="state-card state-card-error" wx:elif="{{viewState === 'error'}}">
+        <text class="state-icon">!</text>
+        <text class="state-title">加载失败</text>
+        <text class="state-description">{{errorMessage}}</text>
+        <view class="primary-button" bindtap="handleRetry">重试</view>
+    </view>
+
+    <view class="state-card" wx:elif="{{viewState === 'empty'}}">
+        <text class="state-icon">○</text>
+        <text class="state-title">还没有档案</text>
+        <text class="state-description">先为自己或家人创建一个健康档案，再开始记录。</text>
+        <view class="primary-button" bindtap="goProfileManage">去创建档案</view>
+    </view>
+
+    <block wx:else>
+        <view class="md-head">
+            <text class="md-head-eyebrow">HEALTH RECORD</text>
+            <text class="md-head-title">体温用药记录</text>
+        </view>
+
+        <view class="profile-card" hover-class="hover-cell" bindtap="goProfileManage">
+            <view class="profile-row">
+                <text class="profile-name">{{profileName}}</text>
+                <text class="profile-badge">{{profileRelation}}</text>
+                <text class="profile-switch">切换 ›</text>
+            </view>
+            <view class="profile-stats">
+                <view class="profile-stat">
+                    <text class="profile-stat-value">{{todayTempCount}}</text>
+                    <text class="profile-stat-label">今日体温</text>
+                </view>
+                <view class="profile-stat">
+                    <text class="profile-stat-value">{{todayMedCount}}</text>
+                    <text class="profile-stat-label">今日用药</text>
+                </view>
+                <view class="profile-stat">
+                    <text class="profile-stat-value">{{latestTemp ? latestTemp.valueText : '--'}}</text>
+                    <text class="profile-stat-label">最近体温</text>
+                </view>
+            </view>
+        </view>
+
+        <view class="md-card">
+            <view class="section-head">
+                <view class="section-lead"><text class="section-emoji">📋</text><text class="section-title">记录批次</text></view>
+                <text class="section-link" bindtap="goBatchManage">管理 ›</text>
+            </view>
+            <view wx:if="{{!hasBatches}}" class="mini-empty">
+                <text class="mini-empty-text">还没有批次。一段病程或一次体检建一个批次，把相关记录归在一起看。</text>
+            </view>
+            <view class="batch-item" wx:for="{{batchItems}}" wx:key="id">
+                <view class="batch-main" hover-class="hover-cell" data-id="{{item.id}}" bindtap="openBatchDetail">
+                    <view class="batch-item-lead"><text class="section-emoji">📋</text><text class="batch-name">{{item.name}}</text></view>
+                    <text class="batch-meta">{{item.count}} 条记录<text wx:if="{{item.startText !== ''}}"> · {{item.startText}}</text></text>
+                </view>
+                <text class="batch-arrow">›</text>
+            </view>
+            <view class="batch-add" hover-class="hover-cell" bindtap="openBatchEditor">
+                <text class="batch-add-text">＋ 添加批次</text>
+            </view>
+        </view>
+
+        <view class="quick-grid">
+            <view class="quick-item" wx:for="{{crossViews}}" wx:key="key" hover-class="hover-cell" data-path="{{item.path}}" bindtap="handleCrossView">
+                <text class="quick-emoji">{{item.emoji}}</text>
+                <text class="quick-text">{{item.text}}</text>
+            </view>
+        </view>
+    </block>
+
+    <view class="editor-mask" wx:if="{{showBatchEditor}}" bindtap="closeBatchEditor"></view>
+    <view class="editor-sheet" wx:if="{{showBatchEditor}}">
+        <text class="sheet-title">新建批次</text>
+        <text class="sheet-error" wx:if="{{formBatchError !== ''}}">{{formBatchError}}</text>
+
+        <view class="field-group">
+            <view class="md-field {{batchFocus === 'name' ? 'md-focus' : ''}}">
+                <text class="md-label">批次名称</text>
+                <input class="md-input" placeholder="如 11月24日发烧 / 体检周期" placeholder-class="md-placeholder" value="{{formBatchName}}" data-field="name" bindinput="handleBatchNameInput" bindfocus="handleFieldFocus" bindblur="handleFieldBlur" maxlength="30" />
+            </view>
+        </view>
+
+        <view class="sheet-actions">
+            <view class="sheet-button" bindtap="closeBatchEditor">取消</view>
+            <view class="sheet-button primary-button {{submittingBatch ? 'is-disabled' : ''}}" hover-class="btn-hover" bindtap="handleCreateBatch"><view class="spinner spinner-sm spinner-white" wx:if="{{submittingBatch}}"></view>{{submittingBatch ? '保存中…' : '创建'}}</view>
+        </view>
+    </view>
+</view>

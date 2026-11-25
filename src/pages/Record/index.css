@@ -1,0 +1,11 @@
+/* 快速记录页特有样式 */
+
+.save-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.save-actions .md-button {
+  flex: 1;
+}

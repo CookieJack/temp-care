@@ -1,0 +1,61 @@
+/* 批次管理页特有样式；MD 通用样式见 app.wxss */
+
+.batch-item {
+    padding: 24rpx 0;
+    border-top: 2rpx solid #F3EDF7;
+}
+
+.batch-item:first-child {
+    border-top: 0;
+    padding-top: 8rpx;
+}
+
+.batch-main {
+    padding-right: 16rpx;
+}
+
+.batch-name {
+    display: block;
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #1C1B1F;
+}
+
+.batch-meta {
+    display: block;
+    margin-top: 8rpx;
+    color: #49454F;
+    font-size: 25rpx;
+}
+
+.batch-updated {
+    display: block;
+    margin-top: 6rpx;
+    color: #79747E;
+    font-size: 22rpx;
+}
+
+.batch-actions {
+    display: flex;
+    margin-top: 18rpx;
+}
+
+.action-button {
+    margin: 0 16rpx 0 0;
+    height: 68rpx;
+    padding: 0 30rpx;
+    border-radius: 999rpx;
+    font-size: 24rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.area-placeholder {
+    color: #79747E;
+}
+
+.btn-hover {
+    opacity: 0.85;
+}

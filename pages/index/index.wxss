@@ -1,0 +1,164 @@
+/* 首页特有样式；MD 通用样式见 app.wxss */
+
+/* 档案卡：MD primary-container 色调 */
+.profile-card {
+    box-sizing: border-box;
+    padding: 30rpx 28rpx;
+    border-radius: 28rpx;
+    background: #EADDFF;
+    margin-bottom: 24rpx;
+}
+
+.profile-row {
+    display: flex;
+    align-items: center;
+}
+
+.profile-name {
+    color: #21005D;
+    font-size: 34rpx;
+    font-weight: 700;
+}
+
+.profile-badge {
+    margin-left: 14rpx;
+    padding: 2rpx 14rpx;
+    border-radius: 999rpx;
+    background: rgba(255, 255, 255, 0.55);
+    color: #21005D;
+    font-size: 20rpx;
+}
+
+.profile-switch {
+    margin-left: auto;
+    color: #4A378A;
+    font-size: 24rpx;
+    font-weight: 500;
+}
+
+.profile-stats {
+    display: flex;
+    margin-top: 22rpx;
+}
+
+.profile-stat {
+    flex: 1;
+    margin-right: 14rpx;
+    padding: 16rpx 8rpx;
+    border-radius: 16rpx;
+    background: rgba(255, 255, 255, 0.55);
+    text-align: center;
+}
+
+.profile-stat:last-child {
+    margin-right: 0;
+}
+
+.profile-stat-value {
+    display: block;
+    color: #21005D;
+    font-size: 36rpx;
+    font-weight: 700;
+}
+
+.profile-stat-label {
+    display: block;
+    margin-top: 4rpx;
+    color: #4A378A;
+    font-size: 22rpx;
+}
+
+/* 快捷入口：白卡 + 色点 */
+/* 首页批次列表 */
+.batch-item {
+    display: flex;
+    align-items: center;
+    padding: 22rpx 0;
+    border-top: 2rpx solid #F3EDF7;
+}
+
+.batch-item:first-of-type {
+    border-top: 0;
+    padding-top: 8rpx;
+}
+
+.batch-main {
+    flex: 1;
+    padding-right: 16rpx;
+}
+
+.batch-name {
+    display: block;
+    font-size: 30rpx;
+    font-weight: 600;
+    color: #1C1B1F;
+}
+
+.batch-meta {
+    display: block;
+    margin-top: 6rpx;
+    color: #49454F;
+    font-size: 24rpx;
+}
+
+.batch-arrow {
+    color: #79747E;
+    font-size: 32rpx;
+    flex-shrink: 0;
+}
+
+.batch-add {
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: 12rpx;
+    padding: 22rpx 0;
+    border-radius: 16rpx;
+    border: 2rpx dashed #79747E;
+    background: transparent;
+    text-align: center;
+}
+
+.batch-add-text {
+    color: #6750A4;
+    font-size: 26rpx;
+    font-weight: 500;
+}
+
+.quick-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 24rpx;
+}
+
+.quick-item {
+    box-sizing: border-box;
+    width: 48%;
+    padding: 38rpx 16rpx;
+    border-radius: 24rpx;
+    background: #ffffff;
+    box-shadow: 0 2rpx 8rpx rgba(28, 27, 31, 0.10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 两行布局：第一行的卡片与第二行之间留出间距 */
+.quick-grid .quick-item:nth-child(-n+2) {
+    margin-bottom: 20rpx;
+}
+
+.quick-emoji {
+    font-size: 36rpx;
+    line-height: 1;
+    margin-right: 12rpx;
+    flex-shrink: 0;
+}
+
+.quick-text {
+    font-size: 28rpx;
+    font-weight: 500;
+    color: #1C1B1F;
+}
+
+/* 记录列表（卡片间距由全局 .md-card 的 margin-bottom 提供） */

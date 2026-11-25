@@ -1,0 +1,104 @@
+<view class="page">
+    <view class="state-card" wx:if="{{viewState === 'loading'}}">
+        <view class="spinner"></view>
+        <text class="state-title">正在加载</text>
+        <text class="state-description">请稍候，图表马上准备好。</text>
+    </view>
+
+    <view class="state-card" wx:elif="{{viewState === 'empty'}}">
+        <text class="state-icon">○</text>
+        <text class="state-title">还没有档案</text>
+        <text class="state-description">先创建档案并记录体温后，这里会生成趋势折线图。</text>
+    </view>
+
+    <view class="state-card state-card-error" wx:elif="{{viewState === 'error'}}">
+        <text class="state-icon">!</text>
+        <text class="state-title">加载失败</text>
+        <text class="state-description">{{errorMessage}}</text>
+        <view class="primary-button" bindtap="handleRetry">重试</view>
+    </view>
+
+    <!-- 以下内容恒渲染，用 hidden 控制显隐：保证 canvas 节点不被销毁，
+         切换时间范围时绘制上下文始终有效 -->
+    <view class="md-head" hidden="{{viewState !== 'ready'}}">
+        <text class="md-head-eyebrow">CHART REPORT</text>
+        <text class="md-head-title">体温图表</text>
+        <text class="md-head-sub">当前档案：{{profileName}} · 折线随记录自动更新</text>
+    </view>
+
+    <view class="segment" hidden="{{viewState !== 'ready'}}">
+        <view class="segment-item {{rangeIndex === index ? 'segment-active' : ''}}" wx:for="{{ranges}}" wx:key="days" data-index="{{index}}" bindtap="handleRangeChange">
+            <text>{{item.label}}</text>
+        </view>
+    </view>
+
+    <view class="chart-card" hidden="{{viewState !== 'ready'}}">
+        <view class="chart-loading" wx:if="{{rangeLoading}}">
+            <view class="spinner"></view>
+            <text class="chart-loading-text">正在生成图表…</text>
+        </view>
+        <canvas type="2d" id="tempChart" class="chart-canvas"></canvas>
+        <view class="legend">
+            <view class="legend-item">
+                <view class="legend-dot" style="background: #6750A4;"></view>
+                <text class="legend-text">正常（&lt;37.3°C）</text>
+            </view>
+            <view class="legend-item">
+                <view class="legend-dot" style="background: #E8710A;"></view>
+                <text class="legend-text">发热</text>
+            </view>
+            <view class="legend-item">
+                <view class="legend-dot" style="background: #B3261E;"></view>
+                <text class="legend-text">≥38.5°C 爆表</text>
+            </view>
+            <view class="legend-item">
+                <view class="legend-line"></view>
+                <text class="legend-text">阈值参考线</text>
+            </view>
+        </view>
+    </view>
+
+    <view class="stats-card" hidden="{{viewState !== 'ready' || stats === null}}">
+        <view class="stat-grid">
+            <view class="stat-cell">
+                <text class="stat-value">{{stats.count}}</text>
+                <text class="stat-label">记录次数</text>
+            </view>
+            <view class="stat-cell">
+                <text class="stat-value" style="color: {{stats.burstCount > 0 ? '#B3261E' : '#1C1B1F'}};">{{stats.burstCount}}</text>
+                <text class="stat-label">≥38.5°C 次数</text>
+            </view>
+            <view class="stat-cell">
+                <text class="stat-value" style="color: #B3261E;">{{stats.maxText}}</text>
+                <text class="stat-label">最高 (°C)</text>
+            </view>
+            <view class="stat-cell">
+                <text class="stat-value" style="color: #1A73E8;">{{stats.minText}}</text>
+                <text class="stat-label">最低 (°C)</text>
+            </view>
+            <view class="stat-cell">
+                <text class="stat-value">{{stats.avgText}}</text>
+                <text class="stat-label">平均 (°C)</text>
+            </view>
+        </view>
+        <text class="stat-time">最高出现在 {{stats.maxTimeText}}</text>
+    </view>
+
+    <view class="content-card" hidden="{{viewState !== 'ready'}}">
+        <view class="section-head">
+            <text class="section-title">用药时间线</text>
+            <text class="section-hint">与图表相同时间段</text>
+        </view>
+        <view wx:if="{{!hasMedData}}" class="mini-empty">
+            <text class="mini-empty-text">该时间段内没有用药记录。</text>
+        </view>
+        <view class="timeline-item" wx:for="{{medTimeline}}" wx:key="id">
+            <view class="timeline-dot"></view>
+            <view class="timeline-main">
+                <text class="timeline-time">{{item.timeText}}</text>
+                <text class="timeline-name">{{item.name}} <text class="timeline-dose">{{item.doseText}}</text></text>
+                <text class="timeline-tag" wx:if="{{item.sourceLabel !== ''}}">{{item.sourceLabel}}</text>
+            </view>
+        </view>
+    </view>
+</view>

@@ -1,0 +1,58 @@
+/* 快速记录页特有样式；MD 通用样式见 app.wxss */
+
+/* 体温大输入的 °C 单位（绝对定位在输入区域右侧，与大数字垂直对齐） */
+.big-unit {
+    position: absolute;
+    right: 28rpx;
+    bottom: 30rpx;
+    color: #49454F;
+    font-size: 32rpx;
+    font-weight: 600;
+}
+
+.md-field-big .md-input {
+    padding-right: 70rpx;
+}
+
+/* 保存按钮行 */
+.save-actions {
+    display: flex;
+    margin-top: 36rpx;
+}
+
+.save-button {
+    flex: 1;
+    height: 96rpx;
+    border-radius: 999rpx;
+    font-size: 30rpx;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+}
+
+.save-button:first-child {
+    margin-right: 16rpx;
+}
+
+.btn-hover {
+    opacity: 0.88;
+}
+
+/* 多种药物条目 */
+.med-add-text {
+    color: #6750A4;
+    font-size: 26rpx;
+    font-weight: 500;
+}
+
+/* 说明文字与上方卡片/错误条的间隔 */
+.rule-hint {
+    margin-top: 20rpx;
+}
+
+.area-placeholder {
+    color: #79747E;
+}

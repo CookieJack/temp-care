@@ -1,0 +1,208 @@
+/* 批次详情页特有样式；MD 通用样式见 app.wxss */
+
+/* 底部悬浮操作行：快速记录主按钮 + 导出 PDF */
+.floating-row {
+    position: fixed;
+    left: 32rpx;
+    right: 32rpx;
+    bottom: 40rpx;
+    display: flex;
+    align-items: stretch;
+    z-index: 50;
+}
+
+.floating-row .floating-action {
+    position: static;
+    flex: 1;
+    margin-right: 16rpx;
+}
+
+.floating-export {
+    width: 200rpx;
+    border-radius: 999rpx;
+    background: #E8DEF8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 22rpx 12rpx;
+    transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.floating-export-hover {
+    opacity: 0.85;
+    transform: scale(0.985);
+}
+
+.floating-export-text {
+    color: #21005D;
+    font-size: 30rpx;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.floating-export-sub {
+    margin-top: 4rpx;
+    color: #4A378A;
+    font-size: 20rpx;
+    line-height: 1.3;
+}
+
+/* 底部悬浮快速记录条：为内容预留空间，避免最后一条记录被遮挡 */
+.page {
+    padding-bottom: 260rpx;
+}
+
+/* 记录行：内容 + 编辑/删除操作 */
+.record-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 24rpx 0;
+    border-top: 2rpx solid #F3EDF7;
+}
+
+.record-row:first-of-type {
+    border-top: 0;
+    padding-top: 8rpx;
+}
+
+/* 时间线行：左侧轴（圆点 + 竖线）+ 内容 + 操作 */
+.tl-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 20rpx 0;
+}
+
+.tl-axis {
+    width: 32rpx;
+    position: relative;
+    align-self: stretch;
+    flex-shrink: 0;
+}
+
+.tl-dot {
+    position: absolute;
+    top: 16rpx;
+    left: 6rpx;
+    width: 18rpx;
+    height: 18rpx;
+    border-radius: 50%;
+    background: #6750A4;
+}
+
+.tl-dot-med {
+    background: #188038;
+}
+
+.tl-line {
+    position: absolute;
+    top: 40rpx;
+    bottom: 0;
+    left: 14rpx;
+    width: 2rpx;
+    background: #E7E0EC;
+}
+
+.tl-row:last-child .tl-line {
+    display: none;
+}
+
+.tl-main {
+    flex: 1;
+    padding-right: 12rpx;
+}
+
+.tl-date {
+    display: block;
+    margin-top: 4rpx;
+    margin-bottom: 8rpx;
+    color: #1C1B1F;
+    font-size: 28rpx;
+    font-weight: 700;
+}
+
+.tl-time {
+    display: block;
+    color: #79747E;
+    font-size: 22rpx;
+    margin-top: 10rpx;
+}
+
+.tl-method {
+    margin-left: 14rpx;
+    color: #49454F;
+    font-size: 24rpx;
+}
+
+.tl-main .item-note {
+    margin-left: 0;
+}
+
+.row-actions {
+    display: flex;
+    flex-shrink: 0;
+    margin-top: 4rpx;
+}
+
+.row-actions .action-button {
+    margin: 0 0 0 12rpx;
+    height: 60rpx;
+    padding: 0 22rpx;
+    font-size: 22rpx;
+}
+
+.temp-line {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.temp-value {
+    font-size: 40rpx;
+    font-weight: 700;
+}
+
+.level-badge {
+    margin-left: 16rpx;
+    padding: 4rpx 16rpx;
+    border-radius: 999rpx;
+    font-size: 22rpx;
+}
+
+.med-tag {
+    margin-left: 12rpx;
+    padding: 4rpx 14rpx;
+    border-radius: 999rpx;
+    background: #E8DEF8;
+    color: #1D192B;
+    font-size: 22rpx;
+}
+
+.med-line {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.med-name {
+    font-size: 30rpx;
+    font-weight: 600;
+    color: #1C1B1F;
+}
+
+.med-dose {
+    margin-left: 16rpx;
+    color: #49454F;
+    font-size: 26rpx;
+}
+
+.manage-link {
+    padding: 8rpx 8rpx 0;
+}
+
+.manage-link-text {
+    color: #6750A4;
+    font-size: 24rpx;
+}

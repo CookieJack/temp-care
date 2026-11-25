@@ -1,0 +1,81 @@
+/* 药名库维护页特有样式；MD 通用样式见 app.wxss */
+
+.name-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22rpx 0;
+    border-top: 2rpx solid #F3EDF7;
+}
+
+.name-item:first-of-type {
+    border-top: 0;
+    padding-top: 8rpx;
+}
+
+.name-main {
+    flex: 1;
+    padding-right: 16rpx;
+}
+
+.name-text {
+    display: block;
+    font-size: 30rpx;
+    font-weight: 600;
+    color: #1C1B1F;
+}
+
+.name-added {
+    display: block;
+    margin-top: 6rpx;
+    color: #79747E;
+    font-size: 22rpx;
+}
+
+.name-meta {
+    display: block;
+    margin-top: 6rpx;
+    color: #49454F;
+    font-size: 24rpx;
+}
+
+.name-meta-warn {
+    color: #B3261E;
+    font-weight: 600;
+}
+
+/* 条目操作按钮组：编辑 / 移除 */
+.name-actions {
+    display: flex;
+    flex-shrink: 0;
+    margin-top: 4rpx;
+}
+
+.name-actions .action-button {
+    margin: 0 0 0 12rpx;
+    height: 60rpx;
+    padding: 0 22rpx;
+    font-size: 22rpx;
+}
+
+/* 弹层内清除链接（过期时间） */
+.clear-link {
+    position: absolute;
+    right: 24rpx;
+    top: 12rpx;
+    color: #6750A4;
+    font-size: 22rpx;
+    z-index: 2;
+}
+
+.area-placeholder {
+    color: #79747E;
+}
+
+.btn-hover {
+    opacity: 0.85;
+}
+
+.fab-hover {
+    background: #D0BCFF;
+}

@@ -1,0 +1,76 @@
+/* Material Design 3 设计令牌
+   来源：小程序 app.wxss（1rpx = 0.5px，按 375px 设计宽换算） */
+:root {
+  /* 色板 */
+  --md-primary: #6750a4;
+  --md-on-primary: #ffffff;
+  --md-primary-container: #eaddff;
+  --md-on-primary-container: #21005d;
+  --md-secondary-container: #e8def8;
+  --md-on-secondary-container: #1d192b;
+  --md-surface: #fef7ff;
+  --md-surface-variant: #e7e0ec;
+  --md-surface-container: #f3edf7;
+  --md-on-surface: #1c1b1f;
+  --md-on-surface-variant: #49454f;
+  --md-outline: #79747e;
+  --md-error: #b3261e;
+  --md-error-container: #f9dedc;
+  --md-success: #188038;
+
+  /* 体温分级（与 utils/common.js LEVEL_COLORS 对齐） */
+  --temp-normal: #00b42a;
+  --temp-low: #2b7de9;
+  --temp-low-fever: #ff9a2e;
+  --temp-mid-fever: #f77a2f;
+  --temp-high-fever: #e64531;
+  --temp-super-fever: #a9170f;
+
+  /* 字号（rpx × 0.5） */
+  --font-10: 10px;
+  --font-11: 11px;
+  --font-12: 12px;
+  --font-13: 13px;
+  --font-14: 14px;
+  --font-15: 15px;
+  --font-16: 16px;
+  --font-17: 17px;
+  --font-22: 22px;
+  --font-26: 26px;
+  --font-28: 28px;
+
+  /* 圆角 */
+  --radius-sm: 6px;
+  --radius-md: 7px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-pill: 999px;
+
+  /* 间距节奏（4px 基准） */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+
+  /* 控件高度（rpx × 0.5） */
+  --control-h: 52px;
+  --control-h-big: 64px;
+  --button-h: 46px;
+
+  /* 阴影与动效 */
+  --shadow-card: 0 1px 4px rgba(28, 27, 31, 0.1);
+  --shadow-sheet: 0 -2px 16px rgba(28, 27, 31, 0.18);
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --duration-fast: 150ms;
+  --duration-sheet: 180ms;
+
+  /* 布局 */
+  --shell-max-width: 560px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}

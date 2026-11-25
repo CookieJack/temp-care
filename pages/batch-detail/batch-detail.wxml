@@ -1,0 +1,278 @@
+<view class="page">
+    <view class="state-card" wx:if="{{viewState === 'loading'}}">
+        <view class="spinner"></view>
+        <text class="state-title">正在加载</text>
+        <text class="state-description">请稍候。</text>
+    </view>
+
+    <view class="state-card" wx:elif="{{viewState === 'empty'}}">
+        <text class="state-icon">○</text>
+        <text class="state-title">批次不存在或已删除</text>
+        <text class="state-description">可能已在批次管理中删除，去批次页查看当前列表。</text>
+        <view class="primary-button" bindtap="goBatchManage">去批次管理</view>
+    </view>
+
+    <view class="state-card state-card-error" wx:elif="{{viewState === 'error'}}">
+        <text class="state-icon">!</text>
+        <text class="state-title">加载失败</text>
+        <text class="state-description">{{errorMessage}}</text>
+        <view class="primary-button" bindtap="handleRetry">重试</view>
+    </view>
+
+    <block wx:else>
+        <view class="md-head">
+            <text class="md-head-eyebrow">BATCH DETAIL</text>
+            <text class="md-head-title">{{batchName}}</text>
+            <text class="md-head-sub">所属档案：{{profileName}} · 体温 {{tempCount}} 次 · 用药 {{medCount}} 次</text>
+        </view>
+
+        <view class="md-card">
+            <view class="section-head">
+                <view class="section-lead"><text class="section-emoji">🕒</text><text class="section-title">记录时间线</text></view>
+                <text class="section-hint">体温与用药按时间合并 · 正序</text>
+            </view>
+            <view wx:if="{{timeline.length === 0}}" class="mini-empty">
+                <text class="mini-empty-text">该批次暂无记录，点下方「快速记录」开始。</text>
+            </view>
+            <view class="tl-row" wx:for="{{timeline}}" wx:key="id">
+                <view class="tl-axis">
+                    <view class="tl-dot {{item.kind === 'med' ? 'tl-dot-med' : ''}}"></view>
+                    <view class="tl-line" wx:if="{{index < timeline.length - 1}}"></view>
+                </view>
+                <view class="tl-main">
+                    <text class="tl-date" wx:if="{{item.showDateHead}}">{{item.dateText}}</text>
+                    <text class="tl-time">{{item.timeText}}</text>
+                    <block wx:if="{{item.kind === 'temp'}}">
+                        <view class="temp-line">
+                            <text class="temp-value" style="color: {{item.levelColor}};">{{item.valueText}}°C</text>
+                            <text class="level-badge" style="background: {{item.levelColor}}; color: #ffffff;">{{item.levelLabel}}</text>
+                            <text class="tl-method">{{item.methodText}}</text>
+                            <text class="med-tag" wx:if="{{item.hasMed}}">含用药</text>
+                        </view>
+                        <text class="item-note" wx:if="{{item.noteText !== ''}}">{{item.noteText}}</text>
+                    </block>
+                    <block wx:else>
+                        <view class="med-line">
+                            <text class="med-name">{{item.name}}</text>
+                            <text class="med-dose">{{item.doseText}}</text>
+                            <text class="tl-method" wx:if="{{item.manufacturer !== ''}}">{{item.manufacturer}}</text>
+                            <text class="med-tag" wx:if="{{item.sourceLabel !== ''}}">{{item.sourceLabel}}</text>
+                        </view>
+                        <text class="item-note" wx:if="{{item.noteText !== ''}}">{{item.noteText}}</text>
+                    </block>
+                </view>
+                <view class="row-actions">
+                    <view class="action-button btn-tonal" hover-class="btn-hover" wx:if="{{item.kind === 'temp'}}" data-id="{{item.id}}" catchtap="openTempEdit">编辑</view>
+                    <view class="action-button btn-error" hover-class="btn-hover" wx:if="{{item.kind === 'temp'}}" data-id="{{item.id}}" catchtap="handleTempDelete">删除</view>
+                    <view class="action-button btn-tonal" hover-class="btn-hover" wx:if="{{item.kind === 'med'}}" data-id="{{item.id}}" catchtap="openMedEdit">编辑</view>
+                    <view class="action-button btn-error" hover-class="btn-hover" wx:if="{{item.kind === 'med'}}" data-id="{{item.id}}" catchtap="handleMedDelete">删除</view>
+                </view>
+            </view>
+        </view>
+
+        <view class="manage-link" bindtap="goBatchManage">
+            <text class="manage-link-text">重命名 / 删除批次，请前往批次管理 ›</text>
+        </view>
+
+        <view class="floating-row">
+            <view class="floating-action" hover-class="floating-action-hover" bindtap="goRecord">
+                <text class="floating-action-text">＋ 快速记录</text>
+                <text class="floating-action-sub">新记录将自动归入「{{batchName}}」</text>
+            </view>
+            <view class="floating-export {{exporting ? 'is-disabled' : ''}}" hover-class="floating-export-hover" bindtap="handleExportPdf">
+                <view class="spinner spinner-sm spinner-white" wx:if="{{exporting}}"></view><text class="floating-export-text">{{exporting ? '生成中…' : '导出'}}</text>
+                <text class="floating-export-sub">PDF 文件</text>
+            </view>
+        </view>
+    </block>
+
+    <!-- 体温编辑弹层 -->
+    <view class="editor-mask {{editorClosing ? 'editor-closing' : ''}}" wx:if="{{showTempEditor}}" bindtap="closeTempEditor"></view>
+    <view class="editor-sheet {{editorClosing ? 'editor-closing' : ''}}" wx:if="{{showTempEditor}}">
+        <text class="sheet-title">编辑体温记录</text>
+        <text class="sheet-error" wx:if="{{tFormError !== ''}}">{{tFormError}}</text>
+        <text class="sheet-hint" wx:if="{{syncHint !== ''}}">{{syncHint}}</text>
+
+        <view class="field-group">
+            <view class="md-field {{focusField === 'tempValue' ? 'md-focus' : ''}}">
+                <text class="md-label">体温（°C）</text>
+                <input class="md-input" type="digit" maxlength="4" placeholder="如 36.8" placeholder-class="md-placeholder" value="{{tFormValue}}" data-field="tempValue" bindinput="handleTempValueInput" bindfocus="handleFieldFocus" bindblur="handleFieldBlur" />
+            </view>
+        </view>
+
+        <view class="field-group">
+            <view class="md-field-row">
+                <view class="md-field md-disabled">
+                    <text class="md-label">测量日期</text>
+                    <picker mode="date" value="{{tFormDate}}" bindchange="handleTempDateChange">
+                        <view class="md-field-inner"><view class="md-picker-cell" hover-class="hover-cell">{{tFormDate}}</view></view>
+                    </picker>
+                </view>
+                <view class="md-field md-disabled">
+                    <text class="md-label">测量时间</text>
+                    <picker mode="time" value="{{tFormTime}}" bindchange="handleTempTimeChange">
+                        <view class="md-field-inner"><view class="md-picker-cell md-picker-cell-last" hover-class="hover-cell">{{tFormTime}}</view></view>
+                    </picker>
+                </view>
+            </view>
+        </view>
+
+        <view class="field-group">
+            <text class="field-label">测量方式</text>
+            <view class="md-chip-row">
+                <view class="md-chip {{tFormMethodIndex === index ? 'md-chip-active' : ''}}" hover-class="md-chip-hover" wx:for="{{methods}}" wx:key="*this" data-index="{{index}}" bindtap="handleMethodChip">{{item}}</view>
+            </view>
+        </view>
+
+        <view class="field-group">
+            <view class="md-switch-card">
+                <view class="md-switch-row">
+                    <text class="field-label md-switch-label">同步记录用药</text>
+                    <switch checked="{{tFormSyncMed}}" color="#6750A4" bindchange="handleSyncChange" />
+                </view>
+                <text class="md-field-hint">开启后为这条体温补充关联用药（服药时间与测量时间一致），可录入多种药物，两边保持关联。</text>
+            </view>
+        </view>
+
+        <block wx:if="{{tFormSyncMed}}">
+            <view class="med-fields">
+                <block wx:for="{{tMeds}}" wx:key="key" wx:for-index="medIndex">
+                    <view class="med-entry {{medIndex > 0 ? 'med-entry-gap' : ''}}">
+                        <view class="med-entry-head">
+                            <text class="med-entry-title">药物 {{medIndex + 1}}</text>
+                            <text class="med-entry-remove" wx:if="{{tMeds.length > 1}}" hover-class="hover-cell" data-index="{{medIndex}}" bindtap="removeTempMedItem">移除</text>
+                        </view>
+
+                        <view class="field-group first">
+                            <view class="md-field {{focusField === 'tempMedName' + medIndex ? 'md-focus' : ''}}">
+                                <text class="md-label">药名</text>
+                                <input class="md-input" placeholder="如 布洛芬混悬液" placeholder-class="md-placeholder" value="{{item.name}}" data-index="{{medIndex}}" data-field="name" bindinput="handleTempMedNameInput" bindfocus="handleFieldFocus" bindblur="handleFieldBlur" maxlength="40" />
+                            </view>
+                            <view class="med-suggest-scroll-wrap">
+                                <scroll-view scroll-x class="med-suggest-scroll" show-scrollbar="{{false}}">
+                                    <view class="med-suggest-row">
+                                        <view class="md-suggest-chip" hover-class="md-suggest-chip-hover" wx:for="{{medSuggestions}}" wx:for-item="sug" wx:for-index="sugIndex" wx:key="label" data-index="{{medIndex}}" data-name="{{sug.name}}" data-manu="{{sug.manufacturer}}" bindtap="handleTempSuggestPick">{{sug.label}}</view>
+                                    </view>
+                                </scroll-view>
+                            </view>
+                        </view>
+
+                        <view class="field-group">
+                            <text class="field-label">剂量</text>
+                            <view class="md-stepper {{focusField === 'tempMedDose' + medIndex ? 'md-stepper-focus' : ''}}">
+                                <view class="stepper-btn" hover-class="hover-cell" data-op="minus" data-index="{{medIndex}}" bindtap="handleTempDoseStep">−</view>
+                                <input class="stepper-input" type="digit" placeholder="选填" placeholder-class="md-placeholder" value="{{item.dose}}" data-index="{{medIndex}}" data-field="dose" bindinput="handleTempDoseInput" bindfocus="handleFieldFocus" bindblur="handleFieldBlur" />
+                                <view class="stepper-btn" hover-class="hover-cell" data-op="plus" data-index="{{medIndex}}" bindtap="handleTempDoseStep">+</view>
+                            </view>
+                        </view>
+
+                        <view class="field-group">
+                            <text class="field-label">单位</text>
+                            <view class="md-chip-row">
+                                <view class="md-chip {{item.unitIndex === chipIndex ? 'md-chip-active' : ''}}" hover-class="md-chip-hover" wx:for="{{units}}" wx:for-item="unit" wx:for-index="chipIndex" wx:key="*this" data-entry="{{medIndex}}" data-index="{{chipIndex}}" bindtap="handleUnitChip">{{unit}}</view>
+                            </view>
+                        </view>
+
+                        <view class="field-group">
+                            <view class="md-area {{focusField === 'tempMedNote' + medIndex ? 'md-focus' : ''}}">
+                                <text class="md-area-label">备注</text>
+                                <textarea class="md-area-textarea" placeholder="可选，补充说明信息" placeholder-class="md-placeholder" value="{{item.note}}" data-index="{{medIndex}}" data-field="note" bindinput="handleTempMedNoteInput" bindfocus="handleFieldFocus" bindblur="handleFieldBlur" maxlength="200" />
+                            </view>
+                        </view>
+                    </view>
+                </block>
+
+                <view class="med-add" hover-class="hover-cell" bindtap="addTempMedItem">
+                    <text class="med-add-text">＋ 添加药物</text>
+                </view>
+
+                <text class="md-field-hint">服药时间与测量时间相同；可添加多种药物，保存后各自生成一条用药记录。</text>
+            </view>
+        </block>
+
+        <view class="field-group">
+            <view class="md-area {{focusField === 'tempNote' ? 'md-focus' : ''}}">
+                <text class="md-area-label">备注</text>
+                <textarea class="md-area-textarea" placeholder="可选，补充说明信息" placeholder-class="md-placeholder" value="{{tFormNote}}" data-field="tempNote" bindinput="handleTempNoteInput" bindfocus="handleFieldFocus" bindblur="handleFieldBlur" maxlength="200" />
+            </view>
+        </view>
+
+        <view class="sheet-actions">
+            <view class="sheet-button" bindtap="closeTempEditor">取消</view>
+            <view class="sheet-button primary-button {{tempSubmitting ? 'is-disabled' : ''}}" hover-class="btn-hover" bindtap="handleTempSave"><view class="spinner spinner-sm spinner-white" wx:if="{{tempSubmitting}}"></view>{{tempSubmitting ? '保存中…' : '保存'}}</view>
+        </view>
+    </view>
+
+    <!-- 用药编辑弹层 -->
+    <view class="editor-mask {{editorClosing ? 'editor-closing' : ''}}" wx:if="{{showMedEditor}}" bindtap="closeMedEditor"></view>
+    <view class="editor-sheet {{editorClosing ? 'editor-closing' : ''}}" wx:if="{{showMedEditor}}">
+        <text class="sheet-title">编辑用药记录</text>
+        <text class="sheet-error" wx:if="{{mFormError !== ''}}">{{mFormError}}</text>
+
+        <view class="field-group">
+            <view class="md-field {{focusField === 'medName' ? 'md-focus' : ''}}">
+                <text class="md-label">药名</text>
+                <input class="md-input" placeholder="如 布洛芬混悬液" placeholder-class="md-placeholder" value="{{mFormName}}" data-field="medName" bindinput="handleMedNameInput" bindfocus="handleFieldFocus" bindblur="handleFieldBlur" maxlength="40" />
+            </view>
+            <view class="med-suggest-scroll-wrap">
+                <scroll-view scroll-x class="med-suggest-scroll" show-scrollbar="{{false}}">
+                    <view class="med-suggest-row">
+                        <view class="md-suggest-chip" hover-class="md-suggest-chip-hover" wx:for="{{medSuggestions}}" wx:for-item="sug" wx:key="label" data-name="{{sug.name}}" data-manu="{{sug.manufacturer}}" bindtap="handleMedSuggestPick">{{sug.label}}</view>
+                    </view>
+                </scroll-view>
+            </view>
+        </view>
+
+        <view class="field-group">
+            <view class="md-field {{focusField === 'medManufacturer' ? 'md-focus' : ''}}">
+                <text class="md-label">厂商名称 <text class="optional">选填</text></text>
+                <input class="md-input" placeholder="如 XX制药（可从快捷药名带入）" placeholder-class="md-placeholder" value="{{mFormManufacturer}}" data-field="medManufacturer" bindinput="handleMedManufacturerInput" bindfocus="handleFieldFocus" bindblur="handleFieldBlur" maxlength="40" />
+            </view>
+        </view>
+
+        <view class="field-group">
+            <text class="field-label">剂量</text>
+            <view class="md-stepper {{focusField === 'medDose' ? 'md-stepper-focus' : ''}}">
+                <view class="stepper-btn" hover-class="hover-cell" data-op="minus" bindtap="handleMedDoseStep">−</view>
+                <input class="stepper-input" type="digit" placeholder="选填" placeholder-class="md-placeholder" value="{{mFormDose}}" data-field="medDose" bindinput="handleMedDoseInput" bindfocus="handleFieldFocus" bindblur="handleFieldBlur" />
+                <view class="stepper-btn" hover-class="hover-cell" data-op="plus" bindtap="handleMedDoseStep">+</view>
+            </view>
+        </view>
+
+        <view class="field-group">
+            <text class="field-label">单位</text>
+            <view class="md-chip-row">
+                <view class="md-chip {{mFormUnitIndex === index ? 'md-chip-active' : ''}}" hover-class="md-chip-hover" wx:for="{{units}}" wx:key="*this" data-index="{{index}}" bindtap="handleUnitChip">{{item}}</view>
+            </view>
+        </view>
+
+        <view class="field-group">
+            <view class="md-field-row">
+                <view class="md-field md-disabled">
+                    <text class="md-label">服药日期</text>
+                    <picker mode="date" value="{{mFormDate}}" bindchange="handleMedDateChange">
+                        <view class="md-field-inner"><view class="md-picker-cell" hover-class="hover-cell">{{mFormDate}}</view></view>
+                    </picker>
+                </view>
+                <view class="md-field md-disabled">
+                    <text class="md-label">服药时间</text>
+                    <picker mode="time" value="{{mFormTime}}" bindchange="handleMedTimeChange">
+                        <view class="md-field-inner"><view class="md-picker-cell md-picker-cell-last" hover-class="hover-cell">{{mFormTime}}</view></view>
+                    </picker>
+                </view>
+            </view>
+        </view>
+
+        <view class="field-group">
+            <view class="md-area {{focusField === 'medNote' ? 'md-focus' : ''}}">
+                <text class="md-area-label">备注</text>
+                <textarea class="md-area-textarea" placeholder="可选，补充说明信息" placeholder-class="md-placeholder" value="{{mFormNote}}" data-field="medNote" bindinput="handleMedNoteInput" bindfocus="handleFieldFocus" bindblur="handleFieldBlur" maxlength="200" />
+            </view>
+        </view>
+
+        <view class="sheet-actions">
+            <view class="sheet-button" bindtap="closeMedEditor">取消</view>
+            <view class="sheet-button primary-button {{medSubmitting ? 'is-disabled' : ''}}" hover-class="btn-hover" bindtap="handleMedSave"><view class="spinner spinner-sm spinner-white" wx:if="{{medSubmitting}}"></view>{{medSubmitting ? '保存中…' : '保存'}}</view>
+        </view>
+    </view>
+</view>

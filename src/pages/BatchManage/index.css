@@ -1,0 +1,70 @@
+/* 批次管理页特有样式 */
+
+.page-batches {
+  padding-bottom: calc(96px + var(--safe-bottom));
+}
+
+.batch-row {
+  padding: 12px 0;
+  border-top: 1px solid var(--md-surface-container);
+}
+
+.batch-row:first-child {
+  border-top: 0;
+  padding-top: 4px;
+}
+
+.batch-row-main {
+  display: block;
+}
+
+.batch-name {
+  display: block;
+  overflow: hidden;
+  color: var(--md-on-surface);
+  font-size: var(--font-16);
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.batch-meta {
+  display: block;
+  margin-top: 4px;
+  color: var(--md-on-surface-variant);
+  font-size: var(--font-12);
+}
+
+.batch-updated {
+  display: block;
+  margin-top: 3px;
+  color: var(--md-outline);
+  font-size: var(--font-11);
+}
+
+.batch-actions {
+  display: flex;
+  margin-top: 9px;
+}
+
+.fab {
+  position: fixed;
+  right: max(16px, calc((100vw - var(--shell-max-width)) / 2 + 16px));
+  bottom: calc(24px + var(--safe-bottom));
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-2xl);
+  background: var(--md-primary-container);
+  color: var(--md-on-primary-container);
+  font-size: var(--font-26);
+  line-height: 1;
+  box-shadow: 0 4px 12px rgba(103, 80, 164, 0.3);
+}
+
+.fab:active {
+  background: #d0bcff;
+}

@@ -1,0 +1,32 @@
+/* 体温历史页特有样式（只读 + 按批次分组）；MD 通用样式见 app.wxss */
+
+.group-head {
+    padding-bottom: 8rpx;
+}
+
+.temp-line {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.temp-value {
+    font-size: 40rpx;
+    font-weight: 700;
+}
+
+.level-badge {
+    margin-left: 16rpx;
+    padding: 4rpx 16rpx;
+    border-radius: 999rpx;
+    font-size: 22rpx;
+}
+
+.med-tag {
+    margin-left: 12rpx;
+    padding: 4rpx 14rpx;
+    border-radius: 999rpx;
+    background: #E8DEF8;
+    color: #1D192B;
+    font-size: 22rpx;
+}

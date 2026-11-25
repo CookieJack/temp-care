@@ -1,0 +1,23 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/record/record",
+    "pages/temp-record/temp-record",
+    "pages/med-record/med-record",
+    "pages/chart-report/chart-report",
+    "pages/profile-manage/profile-manage",
+    "pages/batch-manage/batch-manage",
+    "pages/batch-detail/batch-detail",
+    "pages/med-name-manage/med-name-manage"
+  ],
+  "window": {
+    "navigationBarTitleText": "体温用药记录",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f5f7fa",
+    "backgroundTextStyle": "light"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

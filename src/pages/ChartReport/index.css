@@ -1,0 +1,203 @@
+/* 图表页特有样式；通用样式见 styles/components.css */
+
+/* 时间范围：MD Segmented Button */
+.segment {
+  display: flex;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+  padding: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--md-surface-variant);
+}
+
+.segment-item {
+  flex: 1;
+  padding: 8px 0;
+  border-radius: var(--radius-pill);
+  color: var(--md-on-surface-variant);
+  font-size: var(--font-13);
+  text-align: center;
+  transition:
+    background var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+}
+
+.segment-active {
+  background: #ffffff;
+  color: var(--md-primary);
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(28, 27, 31, 0.1);
+}
+
+/* 图表卡片 */
+.chart-card {
+  position: relative;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+  padding: 12px 10px 10px;
+  border-radius: var(--radius-xl);
+  background: #ffffff;
+  box-shadow: var(--shadow-card);
+}
+
+/* 切换时间范围的加载动画层（覆盖图表区域） */
+.chart-loading {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.9);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-loading-text {
+  margin-top: 8px;
+  color: var(--md-on-surface-variant);
+  font-size: var(--font-12);
+}
+
+.chart-canvas {
+  display: block;
+  width: 100%;
+  height: 280px;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 4px;
+  padding: 0 4px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-right: 12px;
+  margin-bottom: 4px;
+}
+
+.legend-dot {
+  width: 7px;
+  height: 7px;
+  margin-right: 4px;
+  border-radius: 50%;
+}
+
+.legend-line {
+  width: 11px;
+  margin-right: 4px;
+  border-top: 1px dashed #b3261e;
+}
+
+.legend-text {
+  color: var(--md-on-surface-variant);
+  font-size: var(--font-11);
+}
+
+/* 统计卡 */
+.stats-card {
+  box-sizing: border-box;
+  margin-bottom: 12px;
+  padding: 12px 10px;
+  border-radius: var(--radius-xl);
+  background: #ffffff;
+  box-shadow: var(--shadow-card);
+}
+
+.stat-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.stat-cell {
+  box-sizing: border-box;
+  width: 33.33%;
+  padding: 7px 4px;
+  text-align: center;
+}
+
+.stat-value {
+  display: block;
+  color: var(--md-on-surface);
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.stat-label {
+  display: block;
+  margin-top: 3px;
+  color: var(--md-on-surface-variant);
+  font-size: var(--font-11);
+}
+
+.stat-time {
+  display: block;
+  margin-top: 8px;
+  color: var(--md-on-surface-variant);
+  font-size: var(--font-11);
+  text-align: center;
+}
+
+/* 用药时间线 */
+.content-card {
+  box-sizing: border-box;
+  padding: 14px;
+  border-radius: var(--radius-xl);
+  background: #ffffff;
+  box-shadow: var(--shadow-card);
+}
+
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px 0 4px;
+}
+
+.timeline-dot {
+  width: 8px;
+  height: 8px;
+  margin-top: 5px;
+  border-radius: 50%;
+  background: var(--md-primary);
+  flex-shrink: 0;
+}
+
+.timeline-main {
+  flex: 1;
+  margin-left: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--md-surface-container);
+}
+
+.timeline-time {
+  display: block;
+  color: var(--md-on-surface-variant);
+  font-size: var(--font-11);
+}
+
+.timeline-name {
+  display: block;
+  margin-top: 3px;
+  color: var(--md-on-surface);
+  font-size: var(--font-14);
+  font-weight: 600;
+}
+
+.timeline-dose {
+  color: var(--md-on-surface-variant);
+  font-size: var(--font-12);
+  font-weight: 400;
+}
+
+.timeline-tag {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 1px 7px;
+  border-radius: var(--radius-pill);
+  background: var(--md-secondary-container);
+  color: var(--md-on-secondary-container);
+  font-size: var(--font-10);
+}

@@ -1,0 +1,913 @@
+/* Material Design 3 (Material You) 设计系统
+   色板：primary #6750A4 / on-primary #FFFFFF / primary-container #EADDFF
+         on-primary-container #21005D / secondary-container #E8DEF8
+         on-secondary-container #1D192B / surface #FEF7FF / surface-variant #E7E0EC
+         on-surface #1C1B1F / on-surface-variant #49454F / outline #79747E
+         error #B3261E / error-container #F9DEDC
+   规范：输入框统一高度 104rpx（大输入 128rpx），filled 文本框 + 浮动标签；
+         选项少于 8 个一律用单选 chip；FAB 为 16dp 圆角方形。 */
+
+page {
+    min-height: 100%;
+    background: #FEF7FF;
+    color: #1C1B1F;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+}
+
+button {
+    border-radius: 14rpx;
+}
+
+/* ---- 页面骨架 ---- */
+
+.page {
+    box-sizing: border-box;
+    min-height: 100vh;
+    padding: 32rpx 32rpx 72rpx;
+}
+
+/* MD 大标题页头 */
+.md-head {
+    display: flex;
+    flex-direction: column;
+    padding: 24rpx 8rpx 30rpx;
+}
+
+.md-head-eyebrow {
+    color: #6750A4;
+    font-size: 20rpx;
+    font-weight: 700;
+    letter-spacing: 3rpx;
+}
+
+.md-head-title {
+    margin-top: 10rpx;
+    font-size: 44rpx;
+    font-weight: 700;
+    color: #1C1B1F;
+    line-height: 1.25;
+}
+
+.md-head-sub {
+    margin-top: 8rpx;
+    color: #49454F;
+    font-size: 26rpx;
+    line-height: 1.5;
+}
+
+/* ---- 卡片 ---- */
+
+.md-card {
+    box-sizing: border-box;
+    margin-bottom: 24rpx;
+    padding: 28rpx;
+    border-radius: 24rpx;
+    background: #FFFFFF;
+    box-shadow: 0 2rpx 8rpx rgba(28, 27, 31, 0.10);
+}
+
+/* ---- 状态卡 ---- */
+
+.state-card {
+    box-sizing: border-box;
+    padding: 40rpx 32rpx;
+    border-radius: 24rpx;
+    background: #FFFFFF;
+    box-shadow: 0 2rpx 8rpx rgba(28, 27, 31, 0.10);
+    display: flex;
+    min-height: 320rpx;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.state-card-error {
+    background: #F9DEDC;
+}
+
+.state-card-error .state-icon,
+.state-card-error .state-title,
+.state-card-error .state-description {
+    color: #B3261E;
+}
+
+.spinner {
+    width: 44rpx;
+    height: 44rpx;
+    border: 6rpx solid #E8DEF8;
+    border-top-color: #6750A4;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+/* 按钮内小号加载圈 */
+.spinner-sm {
+    width: 26rpx;
+    height: 26rpx;
+    border-width: 4rpx;
+    margin-right: 10rpx;
+    flex-shrink: 0;
+}
+
+/* 紫色按钮内的白色加载圈 */
+.spinner-white {
+    border-color: rgba(255, 255, 255, 0.35);
+    border-top-color: #ffffff;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.state-icon {
+    color: #6750A4;
+    font-size: 56rpx;
+    font-weight: 700;
+}
+
+.state-title {
+    margin-top: 20rpx;
+    font-size: 34rpx;
+    font-weight: 600;
+}
+
+.state-description {
+    margin-top: 12rpx;
+    color: #49454F;
+    font-size: 26rpx;
+    line-height: 1.6;
+}
+
+/* ---- 按钮（MD Filled / Tonal，全 pill） ---- */
+
+.btn-filled {
+    background: #6750A4;
+    color: #FFFFFF;
+    box-shadow: none;
+}
+
+.btn-tonal {
+    background: #E8DEF8;
+    color: #1D192B;
+}
+
+.btn-error {
+    background: #F9DEDC;
+    color: #B3261E;
+}
+
+.primary-button {
+    margin-top: 28rpx;
+    height: 92rpx;
+    border-radius: 999rpx;
+    background: #6750A4;
+    color: #FFFFFF;
+    font-size: 28rpx;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0 40rpx;
+}
+
+/* ---- 区块标题 ---- */
+
+/* ---- 卡片头色点标识 ---- */
+
+.section-lead {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+
+.section-emoji {
+    font-size: 30rpx;
+    line-height: 1;
+    margin-right: 10rpx;
+    flex-shrink: 0;
+}
+
+/* 列表项内：图标 + 名称横排 */
+.batch-item-lead {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+
+/* ---- 卡片头色点标识结束 ---- */
+
+.section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.section-title {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #1C1B1F;
+}
+
+.section-link,
+.clear-link {
+    color: #6750A4;
+    font-size: 26rpx;
+    font-weight: 500;
+}
+
+.section-hint {
+    color: #49454F;
+    font-size: 22rpx;
+}
+
+.optional {
+    color: #49454F;
+    font-size: 24rpx;
+    font-weight: 400;
+}
+
+/* ---- MD Filled 文本框（统一高度 + 浮动标签） ---- */
+
+.field-group {
+    margin-top: 28rpx;
+}
+
+.field-group.first {
+    margin-top: 12rpx;
+}
+
+.field-label {
+    display: block;
+    margin-bottom: 16rpx;
+    font-size: 26rpx;
+    font-weight: 500;
+    color: #1C1B1F;
+}
+
+.required {
+    color: #B3261E;
+}
+
+.md-field {
+    position: relative;
+    box-sizing: border-box;
+    height: 104rpx;
+    padding: 0 28rpx;
+    background: #E7E0EC;
+    border-radius: 12rpx 12rpx 0 0;
+    box-shadow: inset 0 -2rpx 0 rgba(73, 69, 79, 0.55);
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* 聚焦：底部 primary 粗线（inset shadow，不产生布局跳动） */
+.md-field.md-focus {
+    box-shadow: inset 0 -4rpx 0 #6750A4;
+}
+
+.md-field.md-disabled {
+    background: #F3EDF7;
+    box-shadow: inset 0 -2rpx 0 rgba(73, 69, 79, 0.25);
+}
+
+/* 标签常驻顶部固定区域（12–34rpx），不随输入移动：
+   与输入文字区域（34rpx 以下）物理隔离，任何机型都不重叠 */
+.md-label {
+    position: absolute;
+    left: 28rpx;
+    top: 12rpx;
+    font-size: 22rpx;
+    line-height: 22rpx;
+    color: #49454F;
+    transition: color 0.15s ease;
+    pointer-events: none;
+}
+
+.md-focus .md-label {
+    color: #6750A4;
+}
+
+/* 输入区域：固定在标签下方（34–98rpx），文字由系统垂直居中，
+   占位提示一律用原生 placeholder 渲染，位置与文字完全一致 */
+.md-input {
+    position: absolute;
+    left: 28rpx;
+    right: 28rpx;
+    top: 34rpx;
+    height: 64rpx;
+    min-height: 64rpx;
+    box-sizing: border-box;
+    font-size: 30rpx;
+    color: #1C1B1F;
+}
+
+/* 体温大输入：128rpx 高，与普通输入成比例 */
+.md-field.md-field-big {
+    height: 128rpx;
+}
+
+.md-field-big .md-input {
+    top: 40rpx;
+    height: 82rpx;
+    min-height: 82rpx;
+    font-size: 52rpx;
+    font-weight: 700;
+    color: #6750A4;
+}
+
+/* 挑选器（日期/时间）内嵌 md-field：选择值与输入文字同一区域，系统垂直居中 */
+.md-field-inner {
+    position: absolute;
+    left: 28rpx;
+    right: 28rpx;
+    top: 34rpx;
+    height: 64rpx;
+    display: flex;
+    align-items: center;
+}
+
+.md-field-big .md-field-inner {
+    top: 40rpx;
+    height: 82rpx;
+}
+
+.md-picker-cell {
+    flex: 1;
+    font-size: 30rpx;
+    line-height: 40rpx;
+    color: #1C1B1F;
+}
+
+.md-picker-cell-last {
+    text-align: right;
+}
+
+/* 原生 placeholder 颜色（placeholder-class） */
+.md-placeholder {
+    color: #79747E;
+    font-weight: 400;
+}
+
+/* 多列字段行 */
+.md-field-row {
+    display: flex;
+}
+
+.md-field-row .md-field {
+    flex: 1;
+}
+
+.md-field-row .md-field + .md-field {
+    margin-left: 16rpx;
+}
+
+/* MD Filled textarea */
+.md-area {
+    box-sizing: border-box;
+    background: #E7E0EC;
+    border-radius: 16rpx;
+    padding: 18rpx 28rpx 14rpx;
+    box-shadow: inset 0 -2rpx 0 rgba(73, 69, 79, 0.55);
+    transition: box-shadow 0.15s ease;
+}
+
+.md-area.md-focus {
+    box-shadow: inset 0 -4rpx 0 #6750A4;
+}
+
+.md-area-label {
+    display: block;
+    font-size: 22rpx;
+    line-height: 26rpx;
+    color: #49454F;
+    margin-bottom: 6rpx;
+}
+
+.md-focus .md-area-label {
+    color: #6750A4;
+}
+
+.md-area-textarea {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 110rpx;
+    font-size: 28rpx;
+    line-height: 1.5;
+    color: #1C1B1F;
+}
+
+/* ---- MD Stepper（剂量加减输入） ---- */
+
+.md-stepper {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    height: 104rpx;
+    background: #E7E0EC;
+    border-radius: 16rpx;
+    overflow: hidden;
+}
+
+.md-stepper-focus {
+    box-shadow: inset 0 0 0 3rpx #6750A4;
+}
+
+.stepper-btn {
+    width: 96rpx;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 44rpx;
+    font-weight: 600;
+    color: #6750A4;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.stepper-input {
+    flex: 1;
+    height: 100%;
+    min-height: 64rpx;
+    text-align: center;
+    font-size: 34rpx;
+    font-weight: 600;
+    color: #1C1B1F;
+}
+
+/* ---- 单选 chip（MD Filter Chip） ---- */
+
+.md-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -8rpx;
+}
+
+.md-chip {
+    height: 64rpx;
+    margin: 8rpx;
+    padding: 0 30rpx;
+    border-radius: 999rpx;
+    border: 2rpx solid #79747E;
+    background: transparent;
+    color: #49454F;
+    font-size: 26rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.md-chip-active {
+    background: #E8DEF8;
+    border-color: #E8DEF8;
+    color: #1D192B;
+    font-weight: 600;
+}
+
+.md-chip-hover {
+    background: #F3EDF7;
+}
+
+.md-field-hint {
+    display: block;
+    margin-top: 10rpx;
+    color: #49454F;
+    font-size: 22rpx;
+    line-height: 1.5;
+}
+
+/* ---- 多药物条目（快速记录与体温编辑共用） ---- */
+
+.med-entry {
+    border-top: 2rpx solid #F3EDF7;
+    padding-top: 8rpx;
+}
+
+.med-entry-gap {
+    margin-top: 20rpx;
+}
+
+.med-entry-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12rpx;
+}
+
+.med-entry-title {
+    font-size: 26rpx;
+    font-weight: 600;
+    color: #6750A4;
+}
+
+.med-entry-remove {
+    color: #B3261E;
+    font-size: 24rpx;
+}
+
+.med-add {
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: 20rpx;
+    padding: 22rpx 0;
+    border-radius: 16rpx;
+    border: 2rpx dashed #79747E;
+    background: transparent;
+    text-align: center;
+}
+
+.med-add-text {
+    color: #6750A4;
+    font-size: 26rpx;
+    font-weight: 500;
+}
+
+/* ---- 药名快捷建议（横滚芯片） ---- */
+
+.med-suggest-scroll {
+    width: 100%;
+    margin-top: 12rpx;
+}
+
+.med-suggest-row {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 2rpx 0;
+}
+
+.md-suggest-chip {
+    height: 56rpx;
+    margin-right: 12rpx;
+    padding: 0 24rpx;
+    border-radius: 999rpx;
+    border: 2rpx solid #D0BCFF;
+    background: #F3EDF7;
+    color: #6750A4;
+    font-size: 24rpx;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.md-suggest-chip-hover {
+    background: #E8DEF8;
+}
+
+/* ---- 胶囊操作按钮（列表行内编辑/删除等） ---- */
+
+.action-button {
+    margin: 0 16rpx 0 0;
+    height: 68rpx;
+    padding: 0 30rpx;
+    border-radius: 999rpx;
+    font-size: 24rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+/* ---- 同步开关卡 ---- */
+
+.md-switch-card {
+    box-sizing: border-box;
+    background: #F3EDF7;
+    border-radius: 16rpx;
+    padding: 22rpx 28rpx;
+}
+
+.md-switch-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.md-switch-label {
+    margin-bottom: 0;
+}
+
+/* ---- 主操作按钮（跨页复用） ---- */
+
+/* MD Filled 主操作（批次详情等页面内发起快速记录） */
+.main-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+    margin-bottom: 24rpx;
+    padding: 26rpx 24rpx;
+    border-radius: 999rpx;
+    background: #6750A4;
+    transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.main-action-hover {
+    opacity: 0.88;
+    transform: scale(0.985);
+}
+
+.main-action-text {
+    color: #ffffff;
+    font-size: 34rpx;
+    font-weight: 700;
+}
+
+.main-action-sub {
+    margin-top: 6rpx;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 24rpx;
+}
+
+/* ---- 提示条 ---- */
+
+.ref-bar {
+    box-sizing: border-box;
+    padding: 18rpx 24rpx;
+    border-radius: 16rpx;
+    background: #E8DEF8;
+    margin-bottom: 24rpx;
+}
+
+.ref-text {
+    color: #1D192B;
+    font-size: 24rpx;
+    line-height: 1.5;
+}
+
+.sheet-error {
+    display: block;
+    margin-bottom: 16rpx;
+    padding: 16rpx 20rpx;
+    border-radius: 16rpx;
+    background: #F9DEDC;
+    color: #B3261E;
+    font-size: 24rpx;
+    line-height: 1.5;
+}
+
+.sheet-hint {
+    display: block;
+    margin-top: 16rpx;
+    padding: 16rpx 20rpx;
+    border-radius: 16rpx;
+    background: #E8DEF8;
+    color: #1D192B;
+    font-size: 24rpx;
+    line-height: 1.5;
+}
+
+.rule-hint {
+    display: block;
+    color: #49454F;
+    font-size: 24rpx;
+    line-height: 1.6;
+}
+
+.mini-empty {
+    padding: 28rpx 0 8rpx;
+}
+
+.mini-empty-text {
+    color: #49454F;
+    font-size: 26rpx;
+}
+
+/* ---- 底部弹层 ---- */
+
+.editor-mask {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(28, 27, 31, 0.45);
+    /* 高于页面悬浮按钮（floating-row 50），弹层打开时盖住一切悬浮元素 */
+    z-index: 100;
+    animation: maskIn 0.18s ease-out;
+}
+
+.editor-mask.editor-closing {
+    animation: maskOut 0.16s ease-in forwards;
+}
+
+.editor-sheet {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    box-sizing: border-box;
+    max-height: 82vh;
+    overflow-y: auto;
+    padding: 40rpx 32rpx 52rpx;
+    border-radius: 32rpx 32rpx 0 0;
+    background: #FEF7FF;
+    box-shadow: 0 -12rpx 36rpx rgba(28, 27, 31, 0.14);
+    z-index: 110;
+    animation: sheetIn 0.22s cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
+.editor-sheet.editor-closing {
+    animation: sheetOut 0.18s ease-in forwards;
+}
+
+@keyframes maskIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes maskOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes sheetIn {
+    from {
+        transform: translateY(40%);
+        opacity: 0.4;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes sheetOut {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(100%);
+    }
+}
+
+.sheet-title {
+    display: block;
+    font-size: 34rpx;
+    font-weight: 600;
+    margin-bottom: 24rpx;
+}
+
+.sheet-actions {
+    display: flex;
+    margin-top: 36rpx;
+}
+
+.sheet-button {
+    flex: 1;
+    margin-top: 0;
+    height: 92rpx;
+    border-radius: 999rpx;
+    background: #E8DEF8;
+    color: #1D192B;
+    font-size: 28rpx;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+}
+
+.sheet-button.primary-button {
+    background: #6750A4;
+    color: #FFFFFF;
+    box-shadow: none;
+}
+
+.sheet-button + .sheet-button {
+    margin-left: 16rpx;
+}
+
+/* ---- 列表 ---- */
+
+.list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24rpx 0;
+    border-top: 2rpx solid #F3EDF7;
+}
+
+.list-item:first-child {
+    border-top: 0;
+    padding-top: 8rpx;
+}
+
+.list-main {
+    flex: 1;
+    padding-right: 20rpx;
+}
+
+.item-time {
+    display: block;
+    margin-top: 10rpx;
+    color: #49454F;
+    font-size: 25rpx;
+}
+
+.item-note {
+    display: block;
+    margin-top: 8rpx;
+    color: #79747E;
+    font-size: 24rpx;
+}
+
+.delete-button {
+    margin: 0;
+    height: 72rpx;
+    padding: 0 30rpx;
+    border-radius: 999rpx;
+    background: #F9DEDC;
+    color: #B3261E;
+    font-size: 24rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+/* ---- MD 3 FAB：圆角方形（view 实现，不受 button 默认样式影响） ---- */
+
+.fab {
+    position: fixed;
+    right: 32rpx;
+    bottom: 48rpx;
+    width: 112rpx;
+    height: 112rpx;
+    border-radius: 32rpx;
+    background: #EADDFF;
+    color: #21005D;
+    font-size: 52rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8rpx 24rpx rgba(103, 80, 164, 0.30);
+}
+
+.fab-hover {
+    background: #D0BCFF;
+    box-shadow: 0 6rpx 16rpx rgba(103, 80, 164, 0.24);
+}
+
+/* ---- 底部悬浮主操作（批次详情等） ---- */
+
+.floating-action {
+    position: fixed;
+    left: 32rpx;
+    right: 32rpx;
+    bottom: 40rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 22rpx 24rpx;
+    border-radius: 999rpx;
+    background: #6750A4;
+    box-shadow: 0 10rpx 28rpx rgba(103, 80, 164, 0.34);
+    z-index: 50;
+    transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.floating-action-hover {
+    opacity: 0.88;
+    transform: scale(0.985);
+}
+
+.floating-action-text {
+    color: #ffffff;
+    font-size: 32rpx;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.floating-action-sub {
+    margin-top: 4rpx;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 22rpx;
+    line-height: 1.3;
+}
+
+/* ---- 通用按压反馈 ---- */
+
+.hover-cell {
+    background: #F3EDF7;
+}
+
+.btn-hover {
+    opacity: 0.82;
+}
+
+.is-disabled {
+    opacity: 0.55;
+}

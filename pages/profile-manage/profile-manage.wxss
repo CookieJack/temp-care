@@ -1,0 +1,81 @@
+/* 档案管理页特有样式；MD 通用样式见 app.wxss */
+
+.list-empty {
+    padding: 24rpx 0;
+}
+
+.list-empty-text {
+    color: #49454F;
+    font-size: 26rpx;
+}
+
+.profile-item {
+    padding: 24rpx 0;
+    border-top: 2rpx solid #F3EDF7;
+}
+
+.profile-item:first-child {
+    border-top: 0;
+    padding-top: 8rpx;
+}
+
+.profile-line {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.profile-name {
+    font-size: 32rpx;
+    font-weight: 600;
+}
+
+.profile-badge {
+    margin-left: 16rpx;
+    padding: 4rpx 16rpx;
+    border-radius: 999rpx;
+    background: #E8DEF8;
+    color: #1D192B;
+    font-size: 22rpx;
+}
+
+.active-badge {
+    margin-left: 12rpx;
+    padding: 4rpx 16rpx;
+    border-radius: 999rpx;
+    background: #6750A4;
+    color: #ffffff;
+    font-size: 22rpx;
+}
+
+.profile-count {
+    display: block;
+    margin-top: 10rpx;
+    color: #49454F;
+    font-size: 24rpx;
+}
+
+.profile-actions {
+    display: flex;
+    margin-top: 20rpx;
+}
+
+.action-button {
+    margin: 0 16rpx 0 0;
+    height: 68rpx;
+    padding: 0 30rpx;
+    border-radius: 999rpx;
+    font-size: 24rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.area-placeholder {
+    color: #79747E;
+}
+
+.btn-hover {
+    opacity: 0.85;
+}

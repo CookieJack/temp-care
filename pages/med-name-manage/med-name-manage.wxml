@@ -1,0 +1,83 @@
+<view class="page">
+    <view class="md-head">
+        <text class="md-head-eyebrow">MED NAME LIBRARY</text>
+        <text class="md-head-title">药名库</text>
+        <text class="md-head-sub">录入页的快捷药名来自这里 · 保存记录时未收录的药名会自动加入</text>
+    </view>
+
+    <view class="state-card" wx:if="{{viewState === 'loading'}}">
+        <view class="spinner"></view>
+        <text class="state-title">正在加载</text>
+        <text class="state-description">请稍候。</text>
+    </view>
+
+    <view class="state-card" wx:elif="{{viewState === 'empty'}}">
+        <text class="state-icon">○</text>
+        <text class="state-title">药名库还是空的</text>
+        <text class="state-description">手动添加常用药品（可附厂商与效期），或在保存记录时自动记忆。</text>
+        <view class="primary-button" hover-class="btn-hover" bindtap="openEditor">添加药品名称</view>
+    </view>
+
+    <view class="state-card state-card-error" wx:elif="{{viewState === 'error'}}">
+        <text class="state-icon">!</text>
+        <text class="state-title">加载失败</text>
+        <text class="state-description">{{errorMessage}}</text>
+        <view class="primary-button" hover-class="btn-hover" bindtap="handleRetry">重试</view>
+    </view>
+
+    <view class="md-card" wx:else>
+        <view class="section-head">
+            <text class="section-title">已收录 {{items.length}} 个药名</text>
+            <text class="section-hint">可编辑或移除</text>
+        </view>
+        <view class="name-item" wx:for="{{items}}" wx:key="id">
+            <view class="name-main">
+                <view class="batch-item-lead"><text class="section-emoji">💊</text><text class="name-text">{{item.name}}</text></view>
+                <text class="name-meta" wx:if="{{item.manufacturer !== ''}}">厂商：{{item.manufacturer}}</text>
+                <text class="name-meta {{item.expired ? 'name-meta-warn' : ''}}" wx:if="{{item.expiryDate !== ''}}">有效期至 {{item.expiryDate}}{{item.expired ? '（已过期）' : ''}}</text>
+                <text class="name-added">加入于 {{item.addedText}}</text>
+            </view>
+            <view class="name-actions">
+                <view class="action-button btn-tonal" hover-class="btn-hover" data-id="{{item.id}}" catchtap="openEdit">编辑</view>
+                <view class="action-button btn-error" hover-class="btn-hover" data-id="{{item.id}}" catchtap="handleDelete">移除</view>
+            </view>
+        </view>
+    </view>
+
+    <view class="fab" hover-class="fab-hover" bindtap="openEditor" wx:if="{{viewState === 'ready' || viewState === 'empty'}}">+</view>
+
+    <view class="editor-mask {{editorClosing ? 'editor-closing' : ''}}" wx:if="{{showEditor}}" bindtap="closeEditor"></view>
+    <view class="editor-sheet {{editorClosing ? 'editor-closing' : ''}}" wx:if="{{showEditor}}">
+        <text class="sheet-title">{{editorTitle}}</text>
+        <text class="sheet-error" wx:if="{{formError !== ''}}">{{formError}}</text>
+
+        <view class="field-group">
+            <view class="md-field {{focusField === 'name' ? 'md-focus' : ''}}">
+                <text class="md-label">药品名称</text>
+                <input class="md-input" placeholder="如 布洛芬混悬液" placeholder-class="md-placeholder" value="{{formName}}" data-field="name" bindinput="handleNameInput" bindfocus="handleFieldFocus" bindblur="handleFieldBlur" maxlength="40" />
+            </view>
+        </view>
+
+        <view class="field-group">
+            <view class="md-field {{focusField === 'manufacturer' ? 'md-focus' : ''}}">
+                <text class="md-label">厂商名称 <text class="optional">选填</text></text>
+                <input class="md-input" placeholder="如 XX制药" placeholder-class="md-placeholder" value="{{formManufacturer}}" data-field="manufacturer" bindinput="handleManufacturerInput" bindfocus="handleFieldFocus" bindblur="handleFieldBlur" maxlength="40" />
+            </view>
+        </view>
+
+        <view class="field-group">
+            <view class="md-field md-disabled">
+                <text class="md-label">过期时间 <text class="optional">选填</text></text>
+                <picker mode="date" value="{{formExpiryDate}}" bindchange="handleExpiryChange">
+                    <view class="md-field-inner"><view class="md-picker-cell {{formExpiryDate === '' ? 'md-picker-cell-last' : ''}}" hover-class="hover-cell">{{formExpiryDate === '' ? '选择日期（可选）' : formExpiryDate}}</view></view>
+                </picker>
+                <text class="clear-link" wx:if="{{formExpiryDate !== ''}}" catchtap="clearExpiry">清除</text>
+            </view>
+        </view>
+
+        <view class="sheet-actions">
+            <view class="sheet-button" bindtap="closeEditor">取消</view>
+            <view class="sheet-button primary-button {{submitting ? 'is-disabled' : ''}}" hover-class="btn-hover" bindtap="handleSave"><view class="spinner spinner-sm spinner-white" wx:if="{{submitting}}"></view>{{submitting ? '保存中…' : '保存'}}</view>
+        </view>
+    </view>
+</view>
