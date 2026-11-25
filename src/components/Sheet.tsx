@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import type { ReactNode } from 'react';
+import { useEffect, useRef } from 'react';
+import type { FocusEvent, ReactNode } from 'react';
 
 interface SheetProps {
   open: boolean;
@@ -33,11 +33,10 @@ export function Sheet({ open, title, onClose, children, footer }: SheetProps) {
     const viewport = window.visualViewport;
     const root = document.documentElement;
     const syncViewport = () => {
-      if (!viewport) {
-        return;
-      }
-      root.style.setProperty('--vv-height', `${viewport.height}px`);
-      root.style.setProperty('--vv-top', `${viewport.offsetTop}px`);
+      const height = viewport ? viewport.height : window.innerHeight;
+      const top = viewport ? viewport.offsetTop : 0;
+      root.style.setProperty('--vv-height', `${height}px`);
+      root.style.setProperty('--vv-top', `${top}px`);
     };
     syncViewport();
     viewport?.addEventListener('resize', syncViewport);
@@ -52,6 +51,27 @@ export function Sheet({ open, title, onClose, children, footer }: SheetProps) {
     };
   }, [open]);
 
+  // 键盘动画结束后把聚焦的输入框滚入弹层可视区域
+  const focusTimer = useRef<number | undefined>(undefined);
+  useEffect(() => {
+    return () => window.clearTimeout(focusTimer.current);
+  }, []);
+
+  const handleFocus = (event: FocusEvent<HTMLDivElement>) => {
+    const target = event.target;
+    if (
+      !(target instanceof HTMLInputElement) &&
+      !(target instanceof HTMLTextAreaElement) &&
+      !(target instanceof HTMLSelectElement)
+    ) {
+      return;
+    }
+    window.clearTimeout(focusTimer.current);
+    focusTimer.current = window.setTimeout(() => {
+      target.scrollIntoView({ block: 'nearest' });
+    }, 300);
+  };
+
   if (!open) {
     return null;
   }
@@ -64,6 +84,7 @@ export function Sheet({ open, title, onClose, children, footer }: SheetProps) {
         aria-modal="true"
         aria-label={title}
         onClick={event => event.stopPropagation()}
+        onFocus={handleFocus}
       >
         <h2 className="sheet-heading">{title}</h2>
         <div className="sheet-content">{children}</div>
