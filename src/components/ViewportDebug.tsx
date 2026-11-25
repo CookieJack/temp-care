@@ -1,13 +1,29 @@
 import { useEffect, useState } from 'react';
 
 /**
- * 键盘/视口调试读数：仅在 URL 带 ?debug=1 时显示。
+ * 键盘/视口调试读数：URL 带 ?debug=1 时显示，桌面 PWA（standalone）下始终显示，
  * 用于真机上确认软键盘弹起时各视口高度是否变化。
  */
+const DEBUG_KEY = 'ob_debug_viewport';
+
 export function ViewportDebug() {
-  const [enabled] = useState(
-    () => new URLSearchParams(window.location.search).get('debug') === '1'
-  );
+  const [enabled] = useState(() => {
+    const flag = new URLSearchParams(window.location.search).get('debug');
+    let stored = false;
+    try {
+      if (flag === '1') {
+        window.localStorage.setItem(DEBUG_KEY, '1');
+      }
+      if (flag === '0') {
+        window.localStorage.removeItem(DEBUG_KEY);
+      }
+      stored = window.localStorage.getItem(DEBUG_KEY) === '1';
+    } catch {
+      // 隐私模式下忽略存储失败
+    }
+    const standalone = window.matchMedia('(display-mode: standalone)').matches;
+    return flag === '1' || stored || standalone;
+  });
   const [lines, setLines] = useState<string[]>([]);
 
   useEffect(() => {
@@ -25,10 +41,16 @@ export function ViewportDebug() {
         active instanceof HTMLTextAreaElement ||
         active instanceof HTMLSelectElement;
       const fieldRect = isField ? active.getBoundingClientRect() : null;
-      const virtualKeyboard = (navigator as Navigator & { virtualKeyboard?: unknown })
-        .virtualKeyboard;
+      const virtualKeyboard = (
+        navigator as Navigator & {
+          virtualKeyboard?: { boundingRect?: DOMRect };
+        }
+      ).virtualKeyboard;
+      const keyboardHeight = virtualKeyboard?.boundingRect?.height ?? 0;
+      const standalone = window.matchMedia('(display-mode: standalone)').matches;
 
       setLines([
+        `mode: ${standalone ? 'standalone' : 'browser'}`,
         `inner: ${window.innerWidth}x${window.innerHeight}`,
         `layout: ${root.clientWidth}x${root.clientHeight} scrollY:${Math.round(window.scrollY)}`,
         viewport
@@ -37,7 +59,7 @@ export function ViewportDebug() {
         `css var: h=${root.style.getPropertyValue('--vv-height') || '-'} t=${root.style.getPropertyValue('--vv-top') || '-'}`,
         `sheet: ${sheetRect ? `${Math.round(sheetRect.top)}-${Math.round(sheetRect.bottom)}` : '未打开'}`,
         `focus: ${isField ? active.tagName.toLowerCase() : '无'} ${fieldRect ? `${Math.round(fieldRect.top)}-${Math.round(fieldRect.bottom)}` : ''}`,
-        `virtualKeyboard: ${virtualKeyboard ? '有' : '无'}`,
+        `virtualKeyboard: ${virtualKeyboard ? `有 h=${Math.round(keyboardHeight)}` : '无'}`,
         `meta: ${document.querySelector('meta[name="viewport"]')?.getAttribute('content') ?? '-'}`,
       ]);
     };
