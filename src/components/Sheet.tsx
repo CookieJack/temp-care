@@ -25,6 +25,33 @@ export function Sheet({ open, title, onClose, children, footer }: SheetProps) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [open, onClose]);
 
+  // 移动端键盘弹起时把弹层约束在可视视口内，避免输入框和底部按钮被键盘遮挡
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+    const viewport = window.visualViewport;
+    const root = document.documentElement;
+    const syncViewport = () => {
+      if (!viewport) {
+        return;
+      }
+      root.style.setProperty('--vv-height', `${viewport.height}px`);
+      root.style.setProperty('--vv-top', `${viewport.offsetTop}px`);
+    };
+    syncViewport();
+    viewport?.addEventListener('resize', syncViewport);
+    viewport?.addEventListener('scroll', syncViewport);
+    window.addEventListener('resize', syncViewport);
+    return () => {
+      viewport?.removeEventListener('resize', syncViewport);
+      viewport?.removeEventListener('scroll', syncViewport);
+      window.removeEventListener('resize', syncViewport);
+      root.style.removeProperty('--vv-height');
+      root.style.removeProperty('--vv-top');
+    };
+  }, [open]);
+
   if (!open) {
     return null;
   }

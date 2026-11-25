@@ -422,6 +422,9 @@
 }
 
 .overlay-sheet {
+  top: var(--vv-top, 0);
+  bottom: auto;
+  height: var(--vv-height, 100%);
   align-items: flex-end;
   padding: 0;
 }
@@ -1037,7 +1040,7 @@
 
 .sheet-editor {
   display: flex;
-  max-height: 86vh;
+  max-height: 86%;
   padding: 8px 16px calc(16px + var(--safe-bottom));
   flex-direction: column;
 }
