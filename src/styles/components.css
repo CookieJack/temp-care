@@ -422,21 +422,12 @@
 }
 
 .overlay-sheet {
+  top: var(--vv-top, 0);
+  bottom: auto;
+  height: var(--vv-height, 100%);
   align-items: flex-end;
   padding: 0;
-}
-
-/* 触屏设备的编辑弹层固定在屏幕上部：键盘浮层不改变视口，只有上半屏始终可见 */
-@media (pointer: coarse) {
-  .overlay-editor {
-    align-items: flex-start;
-    padding-top: calc(12px + var(--safe-top));
-  }
-
-  .overlay-editor .sheet-editor {
-    max-height: 44vh;
-    border-radius: 20px;
-  }
+  transition: padding-bottom 180ms var(--ease-standard);
 }
 
 @keyframes overlay-in {
