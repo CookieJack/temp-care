@@ -1,29 +1,13 @@
 import { useEffect, useState } from 'react';
 
 /**
- * 键盘/视口调试读数：URL 带 ?debug=1 时显示，桌面 PWA（standalone）下始终显示，
+ * 键盘/视口调试读数：URL 带 ?debug=1 时显示。
  * 用于真机上确认软键盘弹起时各视口高度是否变化。
  */
-const DEBUG_KEY = 'ob_debug_viewport';
-
 export function ViewportDebug() {
-  const [enabled] = useState(() => {
-    const flag = new URLSearchParams(window.location.search).get('debug');
-    let stored = false;
-    try {
-      if (flag === '1') {
-        window.localStorage.setItem(DEBUG_KEY, '1');
-      }
-      if (flag === '0') {
-        window.localStorage.removeItem(DEBUG_KEY);
-      }
-      stored = window.localStorage.getItem(DEBUG_KEY) === '1';
-    } catch {
-      // 隐私模式下忽略存储失败
-    }
-    const standalone = window.matchMedia('(display-mode: standalone)').matches;
-    return flag === '1' || stored || standalone;
-  });
+  const [enabled] = useState(
+    () => new URLSearchParams(window.location.search).get('debug') === '1'
+  );
   const [lines, setLines] = useState<string[]>([]);
 
   useEffect(() => {

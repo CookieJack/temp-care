@@ -429,6 +429,17 @@
   padding: 0;
 }
 
+/* 键盘浮层不改变视口高度时（部分安卓 PWA），把编辑弹层移到上半屏 */
+.overlay-sheet.is-keyboard-cover {
+  align-items: flex-start;
+  padding-top: calc(8px + var(--safe-top));
+}
+
+.overlay-sheet.is-keyboard-cover .sheet-editor {
+  max-height: 42vh;
+  border-radius: 20px;
+}
+
 @keyframes overlay-in {
   from {
     opacity: 0;

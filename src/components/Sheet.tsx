@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { FocusEvent, ReactNode } from 'react';
 
 interface SheetProps {
@@ -53,9 +53,16 @@ export function Sheet({ open, title, onClose, children, footer }: SheetProps) {
 
   // 键盘动画结束后把聚焦的输入框滚入弹层可视区域
   const focusTimer = useRef<number | undefined>(undefined);
+  const [keyboardCover, setKeyboardCover] = useState(false);
   useEffect(() => {
     return () => window.clearTimeout(focusTimer.current);
   }, []);
+
+  useEffect(() => {
+    if (!open) {
+      setKeyboardCover(false);
+    }
+  }, [open]);
 
   const handleFocus = (event: FocusEvent<HTMLDivElement>) => {
     const target = event.target;
@@ -66,10 +73,17 @@ export function Sheet({ open, title, onClose, children, footer }: SheetProps) {
     ) {
       return;
     }
+    const visibleHeight = () =>
+      Math.min(window.innerHeight, window.visualViewport?.height ?? window.innerHeight);
+    const heightBefore = visibleHeight();
     window.clearTimeout(focusTimer.current);
     focusTimer.current = window.setTimeout(() => {
-      target.scrollIntoView({ block: 'nearest' });
-    }, 300);
+      const heightAfter = visibleHeight();
+      const touchDevice = window.matchMedia('(pointer: coarse)').matches;
+      // 部分安卓 PWA 内核对键盘浮层不更新视口高度，此时把弹层移到上半屏避免被遮挡
+      setKeyboardCover(touchDevice && heightBefore - heightAfter < 40);
+      window.setTimeout(() => target.scrollIntoView({ block: 'nearest' }), 60);
+    }, 350);
   };
 
   if (!open) {
@@ -77,7 +91,11 @@ export function Sheet({ open, title, onClose, children, footer }: SheetProps) {
   }
 
   return (
-    <div className="overlay overlay-sheet" role="presentation" onClick={onClose}>
+    <div
+      className={`overlay overlay-sheet${keyboardCover ? ' is-keyboard-cover' : ''}`}
+      role="presentation"
+      onClick={onClose}
+    >
       <div
         className="sheet sheet-editor"
         role="dialog"
