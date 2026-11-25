@@ -7,7 +7,6 @@ import { ConfirmProvider } from './components/ConfirmDialog';
 import { ActionSheetProvider } from './components/ActionSheet';
 import { UpdatePrompt } from './components/UpdatePrompt';
 import { InstallPrompt } from './components/InstallPrompt';
-import { ViewportDebug } from './components/ViewportDebug';
 import HomePage from './pages/Home';
 import RecordPage from './pages/Record';
 import TempHistoryPage from './pages/TempHistory';
@@ -34,7 +33,6 @@ function Layout() {
   return (
     <div className="app-shell">
       <InstallPrompt />
-      <ViewportDebug />
       <Outlet />
       <UpdatePrompt />
     </div>
